@@ -1,0 +1,11 @@
+#
+/concept/
+#
+*.lnk
+*.sublime-workspace
+*.sublime-project
+#
+*.ase
+/commit.txt
+/server.log
+/notes.txt

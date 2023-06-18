@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>stars of entropy</title>
+	<meta name="viewport" content="width=device-width initial-scale=1">
+	<link rel="stylesheet" href="game.css">
+	<style type="text/css">
+		html {
+			height: 100%;
+		}
+		body {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			display: flex;
+			flex-direction: column;
+			background-color: #111;
+		}
+		canvas {
+			align-self: center;
+		}
+		#textbox {
+			position: absolute;
+			left: 15vmin;
+			right: 15vmin;
+			height: 35vmin;
+			bottom: 15vmin;
+			background-color: #224;
+			color: #fff;
+			padding: 3vmin;
+			border: 2vmin #73b ridge;
+			display: grid;
+			grid-auto-flow: column;
+			grid-gap: 10px;
+			overflow: auto clip;
+			user-select: none;
+		}
+		#portrait {
+			height: 100%;
+			display: contents;
+		}
+		#text {
+			overflow: clip auto;
+			font-size: calc(1rem + 1vmin)
+		}
+	</style>
+</head>
+<body onload="init()">
+	<div id="ctrl" style="display: none;">
+		<div class="button round" id="ctrl_a"> A </div>
+		<div class="button round" id="ctrl_s"> S </div>
+		<div class="button round" id="ctrl_l"> < </div>
+		<div class="button round" id="ctrl_r"> > </div>
+		<div class="button" id="ctrl_spawn"> spawn </div>
+	</div>
+		<div id="textbox">
+		    <img id="portrait" style="display: none;">
+		    <span id="text">
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</span>
+		</div>
+	<canvas id="game-screen" width="256" height="192">
+		no canvas support!
+	</canvas>
+	<div>
+		<div> <!-- classes -->
+			<script type="text/javascript" src="ship/player.js"></script>
+			<script type="text/javascript" src="ship/spawn.js"></script>
+			<script type="text/javascript" src="ship/octa.js"></script>
+			<script type="text/javascript" src="gun/pea.js"></script>
+		</div>
+		<!-- misc -->
+		<script type="text/javascript" src="input.js"></script>
+		<script type="text/javascript" src="main.js"></script>
+	</div>
+</body>
+	<script type="text/javascript">
+		let supportsTouch = 'ontouchstart' in window || navigator.msMaxTouchPoints;
+		document.getElementById("ctrl").style.display = supportsTouch ? 'grid' : 'none';
+	</script>
+</html>

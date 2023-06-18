@@ -1,0 +1,52 @@
+#screen {
+	display: flex;
+	align-content: center;
+	justify-content: center;
+}
+#ctrl {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	user-select: none;
+}
+#ctrl_a {bottom: 5vmin; right: 5vmin;}
+#ctrl_s {bottom: 5vmin; right: 35vmin;}
+#ctrl_l {bottom: 5vmin; left: 5vmin;}
+#ctrl_r {bottom: 5vmin; left: 35vmin;}
+#ctrl_spawn {
+	background-color: darkgray;
+	width: 30vmin;
+	height: 15vmin;
+	line-height: 15vmin;
+	font-size: 12vmin;
+	top: 5vmin;
+	justify-self: center;
+}
+.button {
+	border-radius: 999px;
+	position: absolute;
+	text-align: center;
+	opacity: 0.3;
+	color: #fff;
+}
+.round {
+	background-color: crimson;
+	width: 25vmin;
+	height: 25vmin;
+	line-height: 25vmin;
+	font-size: 20vmin;
+}
+canvas {
+	-ms-interpolation-mode: nearest-neighbor;
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+	height: fit-content;
+	width: 100%;
+	background-color: #fff1;
+}
+@media only screen and (orientation: landscape) {
+	canvas {
+	height: 100%;
+	width: fit-content;
+	}
+}
