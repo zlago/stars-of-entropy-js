@@ -1,56 +1,70 @@
-const fps = 30;
-const playerBullets = [];
-const enemy = [];
-const enemyBullets = [];
-const remove = [];
+const TAU = Math.PI * 2, fps = 30;
 
-const canvas = document.getElementById("game-screen");
-const ctx = canvas.getContext("2d");
+// get canvas and its context
+const canvas = document.getElementById("game-screen"),
+ctx = canvas.getContext("2d");
 
-const player = new shipPlayer(canvas.width / 2, canvas.height / 2);
+// init
+const actor = [], bullet = [];
+let player = actor.push(new shipPlayer()) - 1;
 
-function init() {
-	setInterval(tick, 1000 / fps);
-}
+// get touch, show buttons
+let supportsTouch = 'ontouchstart' in window || navigator.msMaxTouchPoints;
+document.getElementById("ctrl").style.display = supportsTouch? 'grid': 'none';
 
-function rand(input = 2) {
-	return Math.floor(Math.random() * input);
-}
+// hide fullscreen button and lock orientation
+addEventListener("fullscreenchange", e => {
+	// hide/show fullscreen button
+	document.getElementById("fullscreen").style.display = document.fullscreenElement? 'none': 'block';
+	// lock/unlock orientation
+	document.fullscreenElement?
+	screen.orientation.lock("landscape").catch(e => // lock
+	{if (e.code != e.NOT_SUPPORTED_ERR) {throw e;};}): // (silence)
+	screen.orientation.unlock(); // or unlock
+}, true);
 
-function collide(obj1, obj2) {
-	return (
-		obj1.x + obj1.size > obj2.x - obj2.size &&
-		obj1.x - obj1.size < obj2.x + obj2.size &&
-		obj1.y + obj1.size > obj2.y - obj2.size &&
-		obj1.y - obj1.size < obj2.y + obj2.size
-	);
+// misc functions
+function debug() {
+	if (player + 1) {
+		spawn(rand(2)? octahedronShip: tridipyraShip);
+	} else {
+		//clearArray(actor); clearArray(bullet);
+		player = actor.push(new shipPlayer()) - 1;
+	}
 }
 
 function tick() {
 	clear();
-	player.update();
-	player.draw();
-	processGroup(playerBullets);
-	processGroup(enemy);
-	processGroup(enemyBullets);
+	processGroup(actor);
+	processGroup(bullet);
+	//drawHud();
 }
 
 function processGroup(group) {
 	for (i in group) {
 		group[i].update(i);
-		group[i].draw();
-	}
-	for (let i = remove.length; i > 0; i--) {
-		group.splice(remove.pop(), 1);
+		group[i]? group[i].draw? group[i].draw(): 0: 0;
 	}
 }
 
-function clear() {
-	ctx.beginPath();
-	ctx.fillStyle = "#000";
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
+function drawHud() {
+	const max = player.constructor.hp - 1, min = Math.min(player.hp - 1, max);
+	ctx.strokeStyle = "#888";
+	ctx.strokeRect(8.5, 8.5, max, 7);
+	if (min > 0) {
+		ctx.strokeStyle = "#fff";
+		ctx.strokeRect(8.5, 8.5, min, 7);
+	}
 }
 
-function clamp(value, min, max) {
-	return Math.min(Math.max(value, min), max);
-}
+mod = (x, y) => x % y + (x < 0? y: 0);
+clearArray = a => a.splice(0, a.length);
+rand = i => Math.floor(Math.random() * i);
+clamp = (v, x, y) => Math.min(Math.max(v, x), y);
+clear = e => ctx.clearRect(0, 0, canvas.width, canvas.height);
+collide = (a, v, d) =>
+	a.x + a.size > v.x - v.size &&
+	a.x - a.size < v.x + v.size &&
+	a.y + a.size > v.y - v.size &&
+	a.y - a.size < v.y + v.size &&
+	d? v.hurt(d): false;

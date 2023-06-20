@@ -1,39 +1,33 @@
-const buttons = [...Array(255).fill(0)];
-//const upKey = 38;
-//const downKey = 40;
-const leftKey = 37;
-const rightKey = 39;
-const aKey = 65;
-const sKey = 83;
+const buttons = [...Array(255).fill(false)];
+const leftKey = 37, rightKey = 39, sKey = 83, aKey = 65;
+//const upKey = 38, downKey = 40;
 
-addEventListener("keydown", (event) => {
-	buttons[event.keyCode] = 1;
-	switch (event.keyCode) {
+document.getElementById("fullscreen").addEventListener("click",
+	e => document.getElementsByTagName("html")[0].requestFullscreen()
+);
+
+addEventListener("keydown", e => {
+	buttons[e.keyCode] = 1;
+	switch (e.keyCode) {
 		case 32: // space
-			//player.x = canvas.width / 2;
-			//player.y = canvas.height / 2;
-			enemy.push(new spawn(rand(canvas.width), rand(canvas.height), octahedronShip));
+			debug();
 			break;
-		//default:
+		default:
 		//console.log(event.keyCode)
-	}//*/
+	}
 }, true);
 
-document.getElementById("ctrl_spawn").addEventListener("touchstart", () => {
-	enemy.push(new spawn(rand(canvas.width), rand(canvas.height), octahedronShip));
-})
-
-addEventListener("keyup", (event) => {
-	buttons[event.keyCode] = 0;
-}, true);
+addEventListener("keyup", e => buttons[e.keyCode] = 0, true);
 
 function bindButton(id, input) {
 	let element = document.getElementById(id);
-	element.addEventListener("touchstart", () => {buttons[input] = 1;})
-	element.addEventListener("touchend", () => {buttons[input] = 0;})
+	element.addEventListener("touchstart", e => buttons[input] = true);
+	element.addEventListener("touchend", e => buttons[input] = false);
 }
 
+document.getElementById("ctrl_spawn").addEventListener("touchstart", debug);
 bindButton("ctrl_l", leftKey);
 bindButton("ctrl_r", rightKey);
-bindButton("ctrl_a", aKey);
 bindButton("ctrl_s", sKey);
+bindButton("ctrl_a", aKey);
+document.getElementById("ctrl_ss").addEventListener("touchstart", e => buttons[sKey] = !buttons[sKey]);

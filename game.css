@@ -1,52 +1,97 @@
-#screen {
-	display: flex;
-	align-content: center;
-	justify-content: center;
+body, html {
+	margin: 0;
+	width: 100%; height: 100%;
+	background-color: #111;
+	overflow: clip;
 }
-#ctrl {
-	position: absolute;
-	width: 100%;
-	height: 100%;
+body {
+	display: flex;
+	flex-direction: column;
 	user-select: none;
 }
-#ctrl_a {bottom: 5vmin; right: 5vmin;}
-#ctrl_s {bottom: 5vmin; right: 35vmin;}
-#ctrl_l {bottom: 5vmin; left: 5vmin;}
-#ctrl_r {bottom: 5vmin; left: 35vmin;}
-#ctrl_spawn {
-	background-color: darkgray;
-	width: 30vmin;
-	height: 15vmin;
-	line-height: 15vmin;
-	font-size: 12vmin;
-	top: 5vmin;
-	justify-self: center;
+canvas, img {
+	-ms-interpolation-mode: nearest-neighbor;
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
 }
+
+/* canvas */
+canvas {
+	align-self: center;
+	width: 100%; height: fit-content;
+}
+@media only screen and (orientation: landscape) {
+	canvas {
+	width: fit-content; height: 100%;
+	}
+}
+
+/* button types */
 .button {
 	border-radius: 999px;
 	position: absolute;
 	text-align: center;
 	opacity: 0.3;
 	color: #fff;
+	overflow: clip;
 }
 .round {
-	background-color: crimson;
-	width: 25vmin;
-	height: 25vmin;
-	line-height: 25vmin;
-	font-size: 20vmin;
+	background-color: #e14;
+	width: 25vmin; height: 25vmin;
+	font: 20vmin/25vmin auto;
 }
-canvas {
-	-ms-interpolation-mode: nearest-neighbor;
-	image-rendering: crisp-edges;
-	image-rendering: pixelated;
-	height: fit-content;
-	width: 100%;
-	background-color: #fff1;
+.capsule {
+	background-color: #aaa;
+	width: fit-content; height: 15vmin;
+	font: 12vmin/15vmin auto;
+	padding: 0 3vmin;
 }
-@media only screen and (orientation: landscape) {
-	canvas {
+.round:active {background-color: #b13;}
+.capsule:active {background-color: #888;}
+
+/* buttons */
+#ctrl {
+	display: none;
+	position: absolute;
+	width: 100%; height: 100%;
+}
+#ctrl_spawn, #fullscreen {top: 5vmin;}
+#ctrl_l, #ctrl_r, #ctrl_s, #ctrl_a {bottom: 5vmin;}
+#ctrl_l {left:  5vmin;}
+#ctrl_r {left:  35vmin;}
+#ctrl_s {right: 35vmin;}
+#ctrl_a {right: 5vmin;}
+#ctrl_spawn {justify-self: center;}
+#ctrl_ss {
+	bottom: 30vmin; right: 30vmin;
+	width: 10vmin; height: 10vmin;
+	font: 8vmin/10vmin auto;
+}
+#fullscreen {
+	right: 5vmin;
+	cursor: pointer;
+}
+
+/* text box */
+#textbox {
+	position: absolute;
+	inset: auto 15vmin 15vmin;
+	height: 35vmin;
+	background-color: #224;
+	color: #fff;
+	padding: 3vmin;
+	grid-gap: 3vmin;
+	border: 2vmin ridge #73b;
+	display: /* grid */ none;
+	grid-auto-flow: column;
+	overflow: auto clip;
+}
+#portrait {
 	height: 100%;
-	width: fit-content;
-	}
+	max-height: 35vmin;
+	display: block;
+}
+#text {
+	overflow: clip auto;
+	font: calc(0.5rem + 4vmin) / calc(0.5rem + 4vmin) auto;
 }

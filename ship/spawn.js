@@ -1,15 +1,24 @@
-class spawn {
-	constructor(x, y, en) {
+function spawn(...a) {
+	actor.push(new spawner(...a));
+}
+
+class spawner {
+	static timer = 30;
+	constructor(en = tridipyraShip,
+	x = rand(canvas.width),
+	y = rand(canvas.height), ...a) {
 		this.en = en;
 		this.x = x;
 		this.y = y;
-		this.timer = 30;
+		this.a = a;
+		this.timer = this.constructor.timer;
 	}
-	update(i) {
+	update(index) {
 		if (!--this.timer) {
-			enemy[i] = new this.en(this.x, this.y)
+			actor[index] = new this.en(this.x, this.y, ...this.a)
 		}
 	}
+	hurt = dmg => false;
 	draw() {
 		const offs = this.timer;
 		ctx.beginPath();

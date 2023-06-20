@@ -1,9 +1,10 @@
-class octahedronShip {
-	static hp = 5;
-	static dmg = 10;
-	static size = 8;
+class tridipyraShip {
+	static hp = 3;
+	static dmg = 5;
+	static size = 6;
 	static speed = 0.1;
-	static spin = 0.1;
+	static drift = 0.20;
+	static spin = 0.6;
 	static colors = [
 		"#00f",
 		"#0f0",
@@ -31,19 +32,13 @@ class octahedronShip {
 				const dir = Math.atan2(actor[player].x - this.x, actor[player].y - this.y);
 				this.xVel += Math.sin(dir) * this.constructor.speed;
 				this.yVel += Math.cos(dir) * this.constructor.speed;
-				// pew
+				// hell
 				if (this.cooldown-- <= 0) {
-					// stop
-					this.xVel = 0;
-					this.yVel = 0;
-					// shoot
-					/*enemyBullets.push(new bulletPlayer(
-						this.x, this.y,
-						(actor[player].x - this.x) * 0.05,
-						(actor[player].y - this.y) * 0.05
-					));*/
+					// thing
+					this.xVel *= this.constructor.drift;
+					this.yVel *= this.constructor.drift;
 					// reset
-					this.cooldown = rand(90) + 30;
+					this.cooldown = rand(60) + 30;
 				}
 				// collide
 				collide(this, actor[player], this.constructor.dmg)
@@ -56,36 +51,40 @@ class octahedronShip {
 		}
 	}
 	hurt(dmg) {
-		this.hp -= dmg;
+		this.hp -= dmg
 		return true;
 	}
 	draw() {
 		ctx.beginPath();
-		ctx.strokeStyle = this.color? this.color: this.constructor.colors[rand(this.constructor.colors.length)];
+		ctx.strokeStyle = this.color;
+		ctx.moveTo(this.x, this.y + this.size);
+		// math
+		if (this.rot < 0) {
+			this.rot = (this.rot % (TAU)) + TAU;
+		}
 		const l = [
 			Math.sin(this.rot) * this.size,
-			Math.sin(this.rot + Math.PI * 0.5) * this.size,
-			Math.sin(this.rot + Math.PI) * this.size,
-			Math.sin(this.rot + Math.PI * 1.5) * this.size
+			Math.sin(this.rot + TAU / 3) * this.size,
+			Math.sin(this.rot + TAU / 1.5) * this.size
 		];
-		const lmin = Math.min(...l), lmax = Math.max(...l),
-		n = mod(Math.round((-this.rot + TAU * 0.5) / TAU * 4 % 4), 4);
-		ctx.moveTo(this.x, this.y - this.size);
-		// diamond
-		for (let i = l.length; i-- > 0;) {
-			const x = this.x, y = this.y + (i % 2? this.size: -this.size);
-			if (i != n) {
+		const lmin = Math.min(...l), lmax = Math.max(...l);
+		if ((this.rot + TAU / 12) % (TAU / 3) > TAU / 6) {
+			// line left
+			ctx.lineTo(this.x + lmin, this.y);
+			ctx.lineTo(this.x, this.y - this.size);
+			// line right
+			ctx.lineTo(this.x + lmax, this.y);
+			ctx.lineTo(this.x, this.y + this.size);
+		} else {
+			for (let i = l.length; i-- > 0;) {
 				ctx.lineTo(this.x + l[i], this.y);
-				ctx.lineTo(x, y);
-			} else {
-				ctx.moveTo(x, y);
-			}
+				ctx.lineTo(this.x, this.y + (i % 2? this.size: -this.size));}
 		}
 		// line h
 		ctx.moveTo(this.x + lmin, this.y);
 		ctx.lineTo(this.x + lmax, this.y);
 		ctx.stroke();
 		// mod
-		this.rot += this.xVel * this.constructor.spin;
+		this.rot += this.xVel / this.size * this.constructor.spin;
 	}
 }
