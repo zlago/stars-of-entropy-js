@@ -1,7 +1,8 @@
 class octahedronShip {
-	static hp = 5;
+	static hp = 35;
 	static dmg = 10;
 	static size = 8;
+	static hitbox = 4;
 	static speed = 0.1;
 	static spin = 0.1;
 	static colors = [
@@ -13,6 +14,7 @@ class octahedronShip {
 		"#ff0",
 		"#fff",
 	];
+	static spawn = 2;
 	constructor(x = 0, y = 0, ...a) {
 		this.hp = this.constructor.hp;
 		this.x = x;
@@ -21,8 +23,10 @@ class octahedronShip {
 		this.xVel = 0;
 		this.yVel = 0;
 		this.size = this.constructor.size;
-		this.cooldown = 0;
+		this.hitbox = this.constructor.hitbox;
+		this.cooldown = 120;
 		this.color = this.constructor.colors[rand(this.constructor.colors.length)];
+		overwrite(this, a);
 	}
 	update(index) {
 		if (this.hp > 0) {
@@ -37,22 +41,22 @@ class octahedronShip {
 					this.xVel = 0;
 					this.yVel = 0;
 					// shoot
-					/*enemyBullets.push(new bulletPlayer(
-						this.x, this.y,
-						(actor[player].x - this.x) * 0.05,
-						(actor[player].y - this.y) * 0.05
-					));*/
+					bullet.push(new peaBullet(
+						this,
+						(actor[player].x - this.x) * 0.015,
+						(actor[player].y - this.y) * 0.015)
+					);
 					// reset
 					this.cooldown = rand(90) + 30;
 				}
 				// collide
-				collide(this, actor[player], this.constructor.dmg)
+				collide(this, actor[player], this.constructor.dmg);
 			}
 			// move
 			this.x += this.xVel;
 			this.y += this.yVel;
 		} else {
-			delete actor[index];
+			actor[index] = new powerup("hp", this);
 		}
 	}
 	hurt(dmg) {
@@ -61,7 +65,7 @@ class octahedronShip {
 	}
 	draw() {
 		ctx.beginPath();
-		ctx.strokeStyle = this.color? this.color: this.constructor.colors[rand(this.constructor.colors.length)];
+		ctx.strokeStyle = this.color || this.constructor.colors[rand(this.constructor.colors.length)];
 		const l = [
 			Math.sin(this.rot) * this.size,
 			Math.sin(this.rot + Math.PI * 0.5) * this.size,
@@ -70,6 +74,7 @@ class octahedronShip {
 		];
 		const lmin = Math.min(...l), lmax = Math.max(...l),
 		n = mod(Math.round((-this.rot + TAU * 0.5) / TAU * 4 % 4), 4);
+		this.n = n;
 		ctx.moveTo(this.x, this.y - this.size);
 		// diamond
 		for (let i = l.length; i-- > 0;) {

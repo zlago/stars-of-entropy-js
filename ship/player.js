@@ -1,6 +1,7 @@
 class shipPlayer {
 	static hp = 30;
 	static size = 4;
+	static hitbox = 2;
 	static speed = 0.25;
 	static frict = 0.95;
 	static spin = 0.3;
@@ -15,8 +16,12 @@ class shipPlayer {
 		this.xVel = 0;
 		this.yVel = 0;
 		this.size = this.constructor.size;
+		this.hitbox = this.constructor.hitbox;
 		this.bulletCooldown = 0;
 		this.iframes = 60;
+		blur = 0;
+		this.blur = [];
+		overwrite(this, a);
 	}
 	update(index) {
 		if (this.hp > 0) {
@@ -27,18 +32,18 @@ class shipPlayer {
 			// accelerate
 			if (buttons[aKey]) {
 				this.xVel += sin * this.constructor.speed;
-				this.yVel += cos * this.constructor.speed;
+				this.yVel -= cos * this.constructor.speed;
 			}
 			// move
 			this.x += this.xVel;
-			this.y -= this.yVel;
+			this.y += this.yVel;
 			// deaccelerate
 			this.xVel *= this.constructor.frict;
 			this.yVel *= this.constructor.frict;
 			// shoot
 			if (this.bulletCooldown-- <= 0 && buttons[sKey]) {
 				const sin = Math.sin(this.rot), cos = Math.cos(this.rot);
-				bullet.push(new bulletPlayer(this.x, this.y, this.xVel, -this.yVel, sin, -cos));
+				bullet.push(new peaBullet(this, sin, -cos));
 				this.bulletCooldown = this.constructor.bulletCooldown;
 			}
 		} else {
@@ -48,11 +53,21 @@ class shipPlayer {
 	}
 	hurt(dmg) {
 		if (this.iframes <= 0) {
-			this.hp -= dmg;
-			this.iframes = this.constructor.iframes;
+			this.hp -= dmg; blur += (this.hp <= 0? Infinity: dmg);
+			this.iframes = dmg * 2 //this.constructor.iframes;
 			return true;
 		}
 		return false;
+	}
+	powerUp(item) {
+		switch (item.power) {
+			case "hp":
+				this.hp = Math.min(this.hp + item.value, this.constructor.hp);
+				break;
+			default:
+				this.iframes = this.constructor.iframes;
+		}
+		return true;
 	}
 	draw() {
 		ctx.beginPath();
@@ -96,11 +111,29 @@ class shipPlayer {
 				ctx.strokeStyle = "#fff";
 			}
 		}
-			const sin = Math.sin(this.rot) * size,
-			cos = Math.cos(this.rot) * size;
-			ctx.moveTo(x - sin - cos, y - sin + cos);
-			ctx.lineTo(x + sin, y - cos);
-			ctx.lineTo(x - sin + cos, y + sin + cos);
+		ctx.stroke();
+		{
+			const sin = Math.sin(this.rot) * this.size,
+			cos = Math.cos(this.rot) * this.size,
+			v = Math.sqrt((this.xVel ** 2) + (this.yVel ** 2)),
+			v2 = v * 2;
+			this.blur.unshift(this.x, this.y);
+			this.blur.length = Math.floor(v) * 2;
+			for (let i = this.blur.length - 2; i > 0; i -= 2) {
+				ctx.globalAlpha = 1 - (i + 2) / v2;
+				this.draw2(this.blur[i], this.blur[i+1], this.rot, this.size);
+			}
+			ctx.globalAlpha = 1;
+		}
+		this.draw2(x, y, this.rot, size);
+	}
+	draw2(x, y, rot, size) {
+		ctx.beginPath();
+		const sin = Math.sin(rot) * size,
+		cos = Math.cos(rot) * size;
+		ctx.moveTo(x - sin - cos, y - sin + cos);
+		ctx.lineTo(x + sin, y - cos);
+		ctx.lineTo(x - sin + cos, y + sin + cos);
 		ctx.stroke();
 	}
 }

@@ -1,7 +1,8 @@
 class tridipyraShip {
-	static hp = 3;
+	static hp = 15;
 	static dmg = 5;
 	static size = 6;
+	static hitbox = 3;
 	static speed = 0.1;
 	static drift = 0.20;
 	static spin = 0.6;
@@ -14,6 +15,7 @@ class tridipyraShip {
 		"#ff0",
 		"#fff",
 	];
+	static spawn = 1;
 	constructor(x = 0, y = 0, ...a) {
 		this.hp = this.constructor.hp;
 		this.x = x;
@@ -22,8 +24,10 @@ class tridipyraShip {
 		this.xVel = 0;
 		this.yVel = 0;
 		this.size = this.constructor.size;
+		this.hitbox = this.constructor.hitbox;
 		this.cooldown = 0;
 		this.color = this.constructor.colors[rand(this.constructor.colors.length)];
+		overwrite(this, a);
 	}
 	update(index) {
 		if (this.hp > 0) {
@@ -41,7 +45,7 @@ class tridipyraShip {
 					this.cooldown = rand(60) + 30;
 				}
 				// collide
-				collide(this, actor[player], this.constructor.dmg)
+				collide(this, actor[player], this.constructor.dmg);
 			}
 			// move
 			this.x += this.xVel;
@@ -51,7 +55,7 @@ class tridipyraShip {
 		}
 	}
 	hurt(dmg) {
-		this.hp -= dmg
+		this.hp -= dmg;
 		return true;
 	}
 	draw() {
@@ -78,7 +82,8 @@ class tridipyraShip {
 		} else {
 			for (let i = l.length; i-- > 0;) {
 				ctx.lineTo(this.x + l[i], this.y);
-				ctx.lineTo(this.x, this.y + (i % 2? this.size: -this.size));}
+				ctx.lineTo(this.x, this.y + (i % 2? this.size: -this.size));
+			}
 		}
 		// line h
 		ctx.moveTo(this.x + lmin, this.y);

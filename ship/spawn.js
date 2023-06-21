@@ -1,26 +1,24 @@
-function spawn(...a) {
-	actor.push(new spawner(...a));
-}
+spawn = (enemy, x, y, ...a) => actor.push(new spawner(enemy, x, y, ...a));
 
 class spawner {
-	static timer = 30;
-	constructor(en = tridipyraShip,
+	static spawn = 30;
+	constructor(e = tridipyraShip,
 	x = rand(canvas.width),
 	y = rand(canvas.height), ...a) {
-		this.en = en;
+		this.e = e;
 		this.x = x;
 		this.y = y;
 		this.a = a;
-		this.timer = this.constructor.timer;
+		this.timer = this.e.spawn * this.constructor.spawn;
+		this.size = 1 / this.e.spawn;
 	}
 	update(index) {
 		if (!--this.timer) {
-			actor[index] = new this.en(this.x, this.y, ...this.a)
+			actor[index] = new this.e(this.x, this.y, ...this.a)
 		}
 	}
-	hurt = dmg => false;
 	draw() {
-		const offs = this.timer;
+		const offs = this.timer * this.size;
 		ctx.beginPath();
 		ctx.strokeStyle = "#f00";
 		ctx.moveTo(this.x - offs, this.y);
@@ -28,6 +26,6 @@ class spawner {
 		ctx.lineTo(this.x + offs, this.y);
 		ctx.lineTo(this.x, this.y + offs);
 		ctx.lineTo(this.x - offs, this.y);
-		ctx.stroke()
+		ctx.stroke();
 	}
 }

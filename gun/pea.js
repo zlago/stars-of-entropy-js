@@ -1,15 +1,18 @@
-class bulletPlayer {
+class peaBullet {
 	static hp = 30;
-	static dmg = 1;
+	static dmg = 5;
 	static size = 1.5;
+	static hitbox = 1.5;
 	static speed = 3;
-	constructor(x, y, x1, y1, x2, y2) {
+	constructor(parent, x = 0, y = 0, ...a) {
 		this.hp = this.constructor.hp;
-		this.x = x;
-		this.y = y;
-		this.xVel = x1 + x2 * this.constructor.speed;
-		this.yVel = y1 + y2 * this.constructor.speed;
+		this.parent = parent;
+		this.x = parent.x;
+		this.y = parent.y;
+		this.xVel = parent.xVel + x * this.constructor.speed;
+		this.yVel = parent.yVel + y * this.constructor.speed;
 		this.size = this.constructor.size;
+		this.hitbox = this.constructor.hitbox;
 	}
 	update(index) {
 		if (this.hp-- > 0) {
@@ -18,13 +21,14 @@ class bulletPlayer {
 			this.y += this.yVel;
 			// hurt
 			for (const i in actor) {
-				if (collide(this, actor[i], this.constructor.dmg)) {
-					delete bullet[index];
-					break;
+				if (actor[i] != this.parent) {
+					if (collide(this, actor[i], this.constructor.dmg)) {
+						delete bullet[index];
+						break;
+					}
 				}
 			}
 		} else {
-			// die
 			delete bullet[index];
 		}
 	}
