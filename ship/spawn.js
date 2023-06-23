@@ -1,4 +1,4 @@
-spawn = (enemy, x, y, ...a) => actor.push(new spawner(enemy, x, y, ...a));
+spawn = (enemy, x, y, ...a) => actor.add(new spawner(enemy, x, y, ...a));
 
 class spawner {
 	static spawn = 30;
@@ -12,9 +12,10 @@ class spawner {
 		this.timer = this.e.spawn * this.constructor.spawn;
 		this.size = 1 / this.e.spawn;
 	}
-	update(index) {
+	update() {
 		if (!--this.timer) {
-			actor[index] = new this.e(this.x, this.y, ...this.a)
+			actor[this.index] = new this.e(this.x, this.y, ...this.a);
+			actor[this.index].index = this.index;
 		}
 	}
 	draw() {

@@ -1,75 +1,62 @@
-class shipPlayer {
+class shipPlayer extends ship {
 	static hp = 30;
 	static size = 4;
 	static hitbox = 2;
 	static speed = 0.25;
 	static frict = 0.95;
-	static spin = 0.3;
-	static bulletCooldown = 7;
+	static rot = 0.3;
 	static iframes = 15;
 	constructor(x = canvas.width * 0.5,
 	y = canvas.height * 0.5, ...a) {
-		this.hp = this.constructor.hp;
-		this.x = x;
-		this.y = y;
-		this.rot = 0;
-		this.xVel = 0;
-		this.yVel = 0;
-		this.size = this.constructor.size;
-		this.hitbox = this.constructor.hitbox;
-		this.bulletCooldown = 0;
-		this.iframes = 60;
-		blur = 0;
-		this.blur = [];
-		overwrite(this, a);
+		super(x, y, a);
+		this.rot ??= 0;
+		this.iframes ??= 60;
+		this.gun ??= new peaGun(this);
+		afterImage = 0;
+		this.blur ??= [];
 	}
-	update(index) {
-		if (this.hp > 0) {
-			this.iframes--
-			// rotate
-			this.rot += (buttons[rightKey] - buttons[leftKey]) * this.constructor.spin;
-			const sin = Math.sin(this.rot), cos = Math.cos(this.rot);
-			// accelerate
-			if (buttons[aKey]) {
-				this.xVel += sin * this.constructor.speed;
-				this.yVel -= cos * this.constructor.speed;
-			}
-			// move
-			this.x += this.xVel;
-			this.y += this.yVel;
-			// deaccelerate
-			this.xVel *= this.constructor.frict;
-			this.yVel *= this.constructor.frict;
-			// shoot
-			if (this.bulletCooldown-- <= 0 && buttons[sKey]) {
-				const sin = Math.sin(this.rot), cos = Math.cos(this.rot);
-				bullet.push(new peaBullet(this, sin, -cos));
-				this.bulletCooldown = this.constructor.bulletCooldown;
-			}
-		} else {
-			player = undefined;
-			delete actor[index];
+	update() {
+		this.iframes--
+		this.gun.update();
+		// rotate
+		this.rot += (buttons[rightKey] - buttons[leftKey]) * this.constructor.rot;
+		const sin = Math.sin(this.rot), cos = Math.cos(this.rot);
+		// accelerate
+		if (buttons[aKey]) {
+			this.xVel += sin * this.constructor.speed;
+			this.yVel -= cos * this.constructor.speed;
 		}
+		// move
+		this.x += this.xVel;
+		this.y += this.yVel;
+		// deaccelerate
+		this.xVel *= this.constructor.frict;
+		this.yVel *= this.constructor.frict;
+		// shoot
+		if (buttons[sKey]) {this.gun.fire();}
 	}
 	hurt(dmg) {
 		if (this.iframes <= 0) {
-			this.hp -= dmg; blur += (this.hp <= 0? Infinity: dmg);
-			this.iframes = dmg * 2 //this.constructor.iframes;
+			afterImage += dmg;
+			this.iframes = dmg * 2;
+			if ((this.hp -= dmg) <= 0) {
+				afterImage = Infinity;
+				player = undefined;
+				if (this.gun.name != "pea") {
+					// drop weapons (except peashooter)
+					actor[this.index] = new powerup("weapon", this, this.gun.name);
+					actor[this.index].index = this.index;
+				} else {
+					delete actor[this.index];
+				}
+			}
 			return true;
 		}
 		return false;
 	}
-	powerUp(item) {
-		switch (item.power) {
-			case "hp":
-				this.hp = Math.min(this.hp + item.value, this.constructor.hp);
-				break;
-			default:
-				this.iframes = this.constructor.iframes;
-		}
-		return true;
-	}
+	powerUp = i => i[i.power](this); // this is quite silly, should i change it?
 	draw() {
+		this.gun.draw?.();
 		ctx.beginPath();
 		ctx.strokeStyle = "#aaa";
 		let x = this.x, y = this.y, // default in bounds

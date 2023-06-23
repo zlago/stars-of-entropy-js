@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="game.css">
 	<link rel="icon" type="image/x-icon" href="favi.png">
 </head>
-<body onload="setInterval(tick, 1000 / fps)">
+<body>
 	<div id="ctrl">
 		<div class="button round" id="ctrl_a"> A </div>
 		<div class="button round" id="ctrl_s"> S </div>
@@ -33,17 +33,21 @@
 		no canvas support
 	</canvas>
 	<div>
-		<div> <!-- classes -->
+		<!-- / -->
+			<script type="text/javascript" src="main.js"></script>
+			<script type="text/javascript" src="class.js"></script>
+			<script type="text/javascript" src="input.js"></script>
+			<script type="text/javascript" src="icons.js"></script>
+		<!-- /ship/ -->
 			<script type="text/javascript" src="ship/player.js"></script>
 			<script type="text/javascript" src="ship/spawn.js"></script>
 			<script type="text/javascript" src="ship/octa.js"></script>
 			<script type="text/javascript" src="ship/tridi.js"></script>
 			<script type="text/javascript" src="ship/power.js"></script>
+		<!-- /gun/ -->
 			<script type="text/javascript" src="gun/pea.js"></script>
-		</div>
-		<!-- misc -->
-		<script type="text/javascript" src="main.js"></script>
-		<script type="text/javascript" src="input.js"></script>
+			<script type="text/javascript" src="gun/sniper.js"></script>
+			<script type="text/javascript" src="gun/shotgun.js"></script>
 	</div>
 </body>
 </html>
