@@ -5,7 +5,11 @@ class spawner {
 	constructor(e = tridipyraShip,
 	x = rand(canvas.width),
 	y = rand(canvas.height), ...a) {
-		this.e = e;
+		if (typeof e == "string") {
+			this.e = globalThis[e];
+		} else {
+			this.e = e;
+		}
 		this.x = x;
 		this.y = y;
 		this.a = a;

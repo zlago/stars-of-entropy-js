@@ -1,7 +1,7 @@
 class gun {
 	constructor(parent, ...a) {
 		this.parent = parent;
-		this.reload = this.constructor.reload;
+		this.reload = 0;
 		this.name = this.constructor.name;
 	}
 	update = () => this.reload--;

@@ -1,4 +1,4 @@
-class powerup {
+globalThis.powerup = class {
 	static size = 5;
 	static hitbox = 5;
 	static timer = 300;

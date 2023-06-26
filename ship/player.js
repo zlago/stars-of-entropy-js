@@ -1,4 +1,4 @@
-class shipPlayer extends ship {
+globalThis.playerShip = class extends ship {
 	static hp = 30;
 	static size = 4;
 	static hitbox = 2;
@@ -19,10 +19,10 @@ class shipPlayer extends ship {
 		this.iframes--
 		this.gun.update();
 		// rotate
-		this.rot += (buttons[rightKey] - buttons[leftKey]) * this.constructor.rot;
+		this.rot += (key.right - key.left) * this.constructor.rot * (key.d? 0.2: 1);
 		const sin = Math.sin(this.rot), cos = Math.cos(this.rot);
 		// accelerate
-		if (buttons[aKey]) {
+		if (key.a) {
 			this.xVel += sin * this.constructor.speed;
 			this.yVel -= cos * this.constructor.speed;
 		}
@@ -33,11 +33,11 @@ class shipPlayer extends ship {
 		this.xVel *= this.constructor.frict;
 		this.yVel *= this.constructor.frict;
 		// shoot
-		if (buttons[sKey]) {this.gun.fire();}
+		if (key.s) {this.gun.fire();}
 	}
 	hurt(dmg) {
 		if (this.iframes <= 0) {
-			afterImage += dmg;
+			afterImage = Math.max(afterImage, 0) + dmg * 0.5;
 			this.iframes = dmg * 2;
 			if ((this.hp -= dmg) <= 0) {
 				afterImage = Infinity;

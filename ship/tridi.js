@@ -1,4 +1,4 @@
-class tridipyraShip extends ship {
+globalThis.tridipyraShip = class extends ship {
 	static hp = 15;
 	static dmg = 5;
 	static size = 6;

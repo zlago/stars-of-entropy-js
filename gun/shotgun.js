@@ -6,10 +6,11 @@ globalThis.shotGun = class extends gun {
 	static name = "shot";
 	fire() {
 		if (this.reload > 0) {return false;}
-		const sin = Math.sin(this.parent.rot),
-		cos = -Math.cos(this.parent.rot);
+		const sin = Math.sin(this.parent.rot), cos = -Math.cos(this.parent.rot),
+		v = 3 * Math.floor(Math.sqrt((this.parent.xVel ** 2) + (this.parent.yVel ** 2))),
+		min = 3 + v, max = 7 + v * 2;
 		for (let i = this.constructor.shots; i > 0; i--) {
-			const offX = (rand(15) - 7) * 0.02, offY = (rand(15) - 7) * 0.02;
+			const offX = (rand(max) - min) * 0.02, offY = (rand(max) - min) * 0.02;
 			bullet.add(new globalThis[this.constructor.ammo](this.parent, sin + offX, cos + offY));
 		}
 		this.parent.xVel += -sin * this.constructor.recoil;
@@ -32,7 +33,7 @@ globalThis.spreadShot = class extends shot {
 	draw() {
 		const a = this.size;
 		ctx.beginPath();
-		ctx.strokeStyle = "#ff0";
+		ctx.strokeStyle = "#0f0";
 		ctx.moveTo(this.x + a, this.y - a);
 		ctx.lineTo(this.x - a, this.y + a);
 		ctx.moveTo(this.x - a, this.y - a);

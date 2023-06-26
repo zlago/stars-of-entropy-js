@@ -1,4 +1,4 @@
-class octahedronShip extends ship {
+globalThis.octahedronShip = class extends ship {
 	static hp = 35;
 	static dmg = 10;
 	static size = 8;
@@ -68,6 +68,7 @@ class octahedronShip extends ship {
 	}
 	draw() {
 		ctx.beginPath();
+
 		ctx.strokeStyle = this.color || this.constructor.colors[rand(this.constructor.colors.length)];
 		const l = [
 			Math.sin(this.spin) * this.size,

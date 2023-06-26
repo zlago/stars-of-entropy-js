@@ -1,5 +1,5 @@
 globalThis.sniperGun = class extends gun {
-	static reload = 90;
+	static reload = 60;
 	static ammo = "boltShot";
 	static name = "sniper";
 	draw() {
@@ -17,7 +17,7 @@ globalThis.sniperGun = class extends gun {
 globalThis.boltShot = class extends shot {
 	static hp = 10;
 	static dmg = 15;
-	static size = 1;
+	static size = 10;
 	static hitbox = 1;
 	static speed = 30;
 	update() {
@@ -32,8 +32,17 @@ globalThis.boltShot = class extends shot {
 						x1: this.x - this.xVel, x2: this.x,
 						y1: this.y - this.yVel, y2: this.y,
 						}, actor[i], this.constructor.dmg)) {
-						delete bullet[this.index];
-						break;
+						ctx.beginPath();
+						ctx.strokeStyle = "#ff0";
+						ctx.moveTo(this.x + this.size, this.y - this.size);
+						ctx.lineTo(this.x - this.size, this.y + this.size);
+						ctx.moveTo(this.x - this.size, this.y - this.size);
+						ctx.lineTo(this.x + this.size, this.y + this.size);
+						ctx.stroke();
+						if (this.hp-- <= 0) {
+							delete bullet[this.index];
+							break;
+						}
 					}
 				}
 			}
@@ -43,7 +52,7 @@ globalThis.boltShot = class extends shot {
 	}
 	draw() {
 		ctx.beginPath();
-		ctx.strokeStyle = "#ff0";
+		ctx.strokeStyle = "#f70";
 		ctx.moveTo(this.x - this.xVel, this.y - this.yVel);
 		ctx.lineTo(this.x, this.y);
 		ctx.stroke();

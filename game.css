@@ -9,22 +9,18 @@ body {
 	flex-direction: column;
 	user-select: none;
 }
-canvas, img {
-	-ms-interpolation-mode: nearest-neighbor;
-	image-rendering: crisp-edges;
-	image-rendering: pixelated;
-}
 
 /* canvas */
 canvas {
+	-ms-interpolation-mode: nearest-neighbor;
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
 	background: #000;
 	align-self: center;
 	width: 100%; height: fit-content;
 }
 @media only screen and (orientation: landscape) {
-	canvas {
-	width: fit-content; height: 100%;
-	}
+	canvas {width: fit-content; height: 100%;}
 }
 
 /* button types */
@@ -56,13 +52,13 @@ canvas {
 	position: absolute;
 	width: 100%; height: 100%;
 }
-#ctrl_spawn, #fullscreen {top: 5vmin;}
+#ctrl_debug, #fullscreen {top: 5vmin;}
 #ctrl_l, #ctrl_r, #ctrl_s, #ctrl_a {bottom: 5vmin;}
 #ctrl_l {left:  5vmin;}
 #ctrl_r {left:  35vmin;}
 #ctrl_s {right: 35vmin;}
 #ctrl_a {right: 5vmin;}
-#ctrl_spawn {justify-self: center;}
+#ctrl_debug {justify-self: center;}
 #ctrl_ss {
 	bottom: 30vmin; right: 30vmin;
 	width: 10vmin; height: 10vmin;
@@ -73,26 +69,40 @@ canvas {
 	cursor: pointer;
 }
 
-/* text box */
-#textbox {
+.box {
+	display: /* flex */ none;
 	position: absolute;
-	inset: auto 15vmin 15vmin;
-	height: 35vmin;
-	background: #224;
-	color: #fff;
+	background: #222; color: #fff;
+	border: 2vmin ridge #aaa;
 	padding: 3vmin;
-	grid-gap: 3vmin;
-	border: 2vmin ridge #73b;
-	display: /* grid */ none;
-	grid-auto-flow: column;
 	overflow: auto clip;
 }
-#portrait {
-	height: 100%;
-	max-height: 35vmin;
-	display: block;
+#debug {
+	inset: 0; margin: auto;
+	width: fit-content; height: fit-content;
+	flex-direction: column;
+	grid-gap: 1vmin;
 }
-#text {
-	overflow: clip auto;
+
+/* dialogue box */
+#dialbox {
+	inset: auto 10vmin 10vmin;
+	height: 30vmin;
+	grid-gap: 3vmin;
+	grid-auto-flow: column;
 	font: calc(0.5rem + 4vmin) / calc(0.5rem + 4vmin) auto;
 }
+#portrait {height: 100%;}
+#textdiv {
+	display: grid;
+	grid-gap: 1vmin;
+	width: 100%;
+	grid-auto-rows: min-content auto;
+}
+#speakerdiv {
+	display: grid;
+	grid-auto-flow: column;
+	justify-content: space-between;
+}
+#nextbutton {font: inherit;}
+#textbox {overflow: clip auto;}

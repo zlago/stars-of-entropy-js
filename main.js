@@ -7,11 +7,22 @@ const canvas = document.getElementById("game-screen"),
 ctx = canvas.getContext("2d");
 
 // init
-const actor = [], bullet = [];
+const actor = [], bullet = [],
+ticker = {
+	isRunning : false,
+	run : function() {
+		this.pause(); this.isRunning = true;
+		this.interval = setInterval(tick, 1000 / fps);
+		},
+	pause : function() {
+		this.isRunning = false;
+		clearInterval(this.interval);
+	}
+}
 let afterImage = 0, showHitboxes = false, player;
 addEventListener("load", () => {
-	player = actor.add(new shipPlayer());
-	setInterval(tick, 1000 / fps);
+	player = actor.add(new playerShip());
+	ticker.run();
 })
 
 actor.add = bullet.add = function (entity) {
@@ -38,14 +49,6 @@ addEventListener("fullscreenchange", e => {
 }, true);
 
 // misc functions
-function debug() { // test function, with an ever-changing purpose
-	if (player + 1) {
-		spawn(rand(2)? octahedronShip: tridipyraShip);
-	} else {
-		//actor.length = 0; bullet.length = 0;
-		player = actor.add(new shipPlayer());
-	}
-}
 
 function tick() {
 	if (afterImage-- <= 0) {
@@ -85,8 +88,9 @@ function drawHud() {
 
 function overwrite(target, a) {
 	for (const i in a) {
-		a[i] = a[i].replaceAll(" ", "");
 		const t = a[i].split("=");
+		t[0] = t[0].trim(); t[1] = t[1].trim();
+		if (t[1] - 0 != NaN) {t[1] -= 0}
 		target[t[0]] = t[1];
 	}
 }
@@ -133,4 +137,4 @@ function lineRect(l, r, d) { // sort of..
 		(d? r.hurt?.(d): true);
 }
 
-const b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+const b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";

@@ -1,33 +1,39 @@
-const buttons = [...Array(255).fill(false)];
-const leftKey = 37, rightKey = 39, sKey = 83, aKey = 65;
-//const upKey = 38, downKey = 40;
+const key = {a : 0, b : 0, d : 0, left : 0, right : 0, set input(keyCode) {
+	key.binds[this.curr] = keyCode; this.curr = undefined;
+}, curr : undefined, change : (input, value) => {
+	for (const a in key.binds) {
+		if (key.binds[a] == input) {key[a] = value}
+	}
+}, binds : {a : 65, s : 83, d : 68, right : 39, left : 37}} // up: 38, down : 40
 
 document.getElementById("fullscreen").addEventListener("click",
 	e => document.getElementsByTagName("html")[0].requestFullscreen()
 );
 
 addEventListener("keydown", e => {
-	buttons[e.keyCode] = 1;
+	key.change(e.keyCode, true);
 	switch (e.keyCode) {
 		case 32: // space
-			debug();
+			debug.open();
 			break;
 		default:
 		//console.log(event.keyCode)
 	}
 }, true);
 
-addEventListener("keyup", e => buttons[e.keyCode] = 0, true);
+//window.addEventListener("keydown", e => key.input = e.keyCode, {once: true})
+
+addEventListener("keyup", e => key.change(e.keyCode, false), true);
 
 function bindButton(id, input) {
 	let element = document.getElementById(id);
-	element.addEventListener("touchstart", e => buttons[input] = true);
-	element.addEventListener("touchend", e => buttons[input] = false);
+	element.addEventListener("touchstart", e => key[input] = true);
+	element.addEventListener("touchend", e => key[input] = false);
 }
 
-document.getElementById("ctrl_spawn").addEventListener("touchstart", debug);
-bindButton("ctrl_l", leftKey);
-bindButton("ctrl_r", rightKey);
-bindButton("ctrl_s", sKey);
-bindButton("ctrl_a", aKey);
+document.getElementById("ctrl_debug").addEventListener("touchstart", debug.open);
+bindButton("ctrl_l", "left");
+bindButton("ctrl_r", "right");
+bindButton("ctrl_s", "s");
+bindButton("ctrl_a", "a");
 document.getElementById("ctrl_ss").addEventListener("touchstart", e => buttons[sKey] = !buttons[sKey]);
