@@ -1,10 +1,10 @@
-globalThis.peaGun = class extends gun {
-	static ammo = "peaShot";
-	static reload = 7;
+gun.pea = class extends gun.template {
 	static name = "pea";
+	static ammo = "pea";
+	static reload = 7;
 }
 
-globalThis.peaShot = class extends shot {
+shot.pea = class extends shot.template {
 	static hp = 30;
 	static dmg = 5;
 	static size = 1.5;

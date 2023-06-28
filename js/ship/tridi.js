@@ -1,11 +1,11 @@
-globalThis.tridipyraShip = class extends ship {
+ship.tridipyra = class extends ship.template {
 	static hp = 15;
 	static dmg = 5;
 	static size = 6;
 	static hitbox = 3;
-	static speed = 0.1;
-	static drift = 0.20;
-	static spin = 0.6;
+	static speed = .1;
+	static drift = .2;
+	static spin = .6;
 	static colors = [
 		"#00f",
 		"#0f0",
@@ -28,12 +28,10 @@ globalThis.tridipyraShip = class extends ship {
 			const dir = Math.atan2(actor[player].x - this.x, actor[player].y - this.y);
 			this.xVel += Math.sin(dir) * this.constructor.speed;
 			this.yVel += Math.cos(dir) * this.constructor.speed;
-			// hell
+			// course correct
 			if (this.cooldown-- <= 0) {
-				// thing
 				this.xVel *= this.constructor.drift;
 				this.yVel *= this.constructor.drift;
-				// reset
 				this.cooldown = rand(60) + 30;
 			}
 			// collide

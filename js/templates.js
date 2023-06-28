@@ -1,21 +1,22 @@
-class gun {
+gun.template = class {
 	constructor(parent, ...a) {
 		this.parent = parent;
+		const ammo = shot[this.constructor.ammo];
+		this.range = ammo.hp * ammo.speed;
 		this.reload = 0;
 		this.name = this.constructor.name;
 	}
 	update = () => this.reload--;
 	fire() {
 		if (this.reload > 0) {return false;}
-		const sin = Math.sin(this.parent.rot),
-		cos = -Math.cos(this.parent.rot);
-		bullet.add(new globalThis[this.constructor.ammo](this.parent, sin, cos));
+		const sin = Math.sin(this.parent.rot), cos = Math.cos(this.parent.rot);
+		bullet.add(new shot[this.constructor.ammo](this.parent, sin, cos));
 		this.reload = this.constructor.reload;
 		return true;
 	}
 }
 
-class shot {
+shot.template = class {
 	constructor(parent, x = 0, y = 0, ...a) {
 		this.hp = this.constructor.hp;
 		this.parent = parent;
@@ -46,7 +47,7 @@ class shot {
 	}
 }
 
-class ship {
+ship.template = class {
 	constructor(x = 0, y = 0, a) {
 		this.hp = this.constructor.hp;
 		this.x = x;
@@ -56,6 +57,7 @@ class ship {
 		this.size = this.constructor.size;
 		this.hitbox = this.constructor.hitbox;
 		overwrite(this, a);
+		this.hpMax = this.hp;
 	}
 	hurt(dmg) {
 		if ((this.hp -= dmg) <= 0) {

@@ -1,4 +1,7 @@
 // todo: research and debug touch controls
+// todo: weapon carrier ship
+
+"use strict";
 
 const TAU = Math.PI * 2, fps = 30;
 
@@ -7,8 +10,8 @@ const canvas = document.getElementById("game-screen"),
 ctx = canvas.getContext("2d");
 
 // init
-const actor = [], bullet = [],
-ticker = {
+const actor = [], bullet = [], gun = {}, ship = {}, shot = {};
+const ticker = {
 	isRunning : false,
 	run : function() {
 		this.pause(); this.isRunning = true;
@@ -19,9 +22,9 @@ ticker = {
 		clearInterval(this.interval);
 	}
 }
-let afterImage = 0, showHitboxes = false, player;
+let afterImage = 0, showHitboxes = false, showHP = false, player, boss;
 addEventListener("load", () => {
-	player = actor.add(new playerShip());
+	player = actor.add(new ship.player());
 	ticker.run();
 })
 
@@ -56,49 +59,97 @@ function tick() {
 	}
 	processGroup(actor);
 	processGroup(bullet);
-	drawHud();
+	hud.draw();
 }
 
 function processGroup(group) {
 	for (const i in group) {
-		group[i]?.update?.(); // as it turns out, adding a method to an array isnt the best idea
-		if (group[i] && showHitboxes) {
-			const x = group[i].x, y = group[i].y,
-			hX = group[i].hitboxX ?? group[i].hitbox,
-			hY = group[i].hitboxY ?? group[i].hitbox;
+		const one = group[i];
+		one?.update?.(); // as it turns out, adding a method to an array isnt the best idea
+		if (one && showHitboxes) {
+			const x = one.x, y = one.y,
+			hX = one.hitboxX ?? one.hitbox,
+			hY = one.hitboxY ?? one.hitbox;
 			ctx.strokeStyle = "#f00";
 			ctx.strokeRect(x - hX, y - hY, hX * 2, hY * 2);
 		}
-		group[i]? group[i].draw? group[i].draw(): 0: 0;
-	}
-}
-
-function drawHud() {
-	if (player + 1) {
-		const max = actor[player].constructor.hp - 1, min = Math.min(actor[player].hp - 1, max);
-		//ctx.clearRect(8.5, 8.5, max, 7);
-		ctx.strokeStyle = "#888";
-		ctx.strokeRect(8.5, 8.5, max, 7);
-		if (min >= 0) {
+		group[i] && one?.draw?.();
+		if (one?.hpMax && showHP) {
+			const x = one.x, y = one.y,
+			sX = one.sizeX ?? one.size,
+			sY = one.sizeY ?? one.size,
+			hp = one?.hp / one?.hpMax;
+			ctx.strokeStyle = "#888";
+			ctx.strokeRect(x - sX, y + sY + 3, sX * 2, 3);
 			ctx.strokeStyle = "#fff";
-			ctx.strokeRect(8.5, 8.5, min, 7);
+			ctx.strokeRect(x - sX, y + sY + 3, hp * sX * 2, 3);
 		}
 	}
 }
+
+const hud = {
+	draw : function() {
+		if (player != hud.player || boss != hud.boss ||
+		actor[boss]?.hp != hud.bosshp ||
+		actor[player]?.hp != hud.playerhp) {
+			hud.player = player; hud.boss = boss;
+			hud.bosshp = actor[boss]?.hp;
+			hud.playerhp = actor[player]?.hp;
+			hud.update();
+		}
+		ctx.drawImage(hud.ctx.canvas, 0, 0)
+	},
+	update : function() {
+		hud.ctx.clearRect(0, 0, 256, 24)
+		if (player + 1) {
+			const max = actor[player].hpMax - 1, min = Math.min(actor[player].hp - 1, max);
+			hud.ctx.strokeStyle = "#888";
+			hud.ctx.strokeRect(8.5, 8.5, max, 7);
+			if (min >= 0) {
+				hud.ctx.strokeStyle = "#fff";
+				hud.ctx.strokeRect(8.5, 8.5, min, 7);
+			}
+		}
+		if (boss + 1) {
+			const aboss = actor[boss]
+			if (aboss && aboss.constructor != ship.powerup) {
+				const max = Math.min(aboss?.hpMax - 1, 200 - 1),
+				min = aboss?.hp - 1, fine = min % 200,
+				coarse = Math.floor(min / 200);
+				hud.ctx.strokeStyle = this.colors[coarse];
+				hud.ctx.strokeRect(48.5, 8.5, max, 7);
+				for (let i = 0; i < coarse + 1; i++) {
+					hud.ctx.strokeStyle = this.colors[i + 1];
+					hud.ctx.strokeRect(48.5 + i * 6, 18.5, 3, 3);
+				}
+				if (fine > 0) {
+					hud.ctx.strokeStyle = this.colors[coarse + 1];
+					hud.ctx.strokeRect(48.5, 8.5, fine, 7);
+				}
+			} else {
+				boss = undefined;
+			}
+		}
+	},
+	ctx : new OffscreenCanvas(256, 24).getContext("2d"),
+	colors : ["#888", "#fff", "#f0f", "#0ff", "#f00", "#ff0", "#0f0", "#00f", "#f80"]
+}
+
 
 function overwrite(target, a) {
 	for (const i in a) {
 		const t = a[i].split("=");
 		t[0] = t[0].trim(); t[1] = t[1].trim();
-		if (t[1] - 0 != NaN) {t[1] -= 0}
+		if ((t[1] - 0) + "" != "NaN") {t[1] -= 0} // NaN != NaN
 		target[t[0]] = t[1];
 	}
 }
 
-mod = (x, y) => (x % y + (x < 0? y: 0)) % y; // last `% y` fixes an edgecase for `x = -y`
-rand = i => Math.floor(Math.random() * i); // eg. rand(2) = 0 || 1
-clamp = (v, min, max) => Math.min(Math.max(v, min), max); // min <= v <= max
-clear = e => ctx.clearRect(0, 0, canvas.width, canvas.height);
+const rand = i => Math.floor(Math.random() * i), // eg. rand(2) = 0 || 1
+mod = (x, y) => (x % y + (x < 0? y: 0)) % y, // last `% y` fixes an edgecase for `x = -y`
+randRange = (x, y = -x) => Math.random() * (x - y) + y, // x <= randRange(x, y) < y
+clamp = (v, min, max) => Math.min(Math.max(v, min), max), // min <= v <= max
+clear = e => ctx.clearRect(0, 0, canvas.width, canvas.height),
 collide = (a, v, d) => // define d to also try to hurt the enemy
 	a.x + (a.hitboxX ?? a.hitbox) > v.x - (v.hitboxX ?? v.hitbox) &&
 	a.x - (a.hitboxX ?? a.hitbox) < v.x + (v.hitboxX ?? v.hitbox) &&

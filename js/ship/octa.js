@@ -1,10 +1,11 @@
-globalThis.octahedronShip = class extends ship {
+ship.octahedron = class extends ship.template {
 	static hp = 35;
 	static dmg = 10;
 	static size = 8;
 	static hitbox = 4;
-	static speed = 0.1;
-	static spin = 0.1;
+	static speed = .1;
+	static spin = .1;
+	static gun = "pea";
 	static colors = [
 		"#00f",
 		"#0f0",
@@ -17,31 +18,28 @@ globalThis.octahedronShip = class extends ship {
 	static spawn = 2;
 	constructor(x = 0, y = 0, ...a) {
 		super(x, y, a);
+		this.gun ??= this.constructor.gun;
+		this.gun = new gun[this.gun](this);
 		this.spin ??= 0;
 		this.cooldown ??= 120;
 		this.color ??= this.constructor.colors[rand(this.constructor.colors.length)];
 	}
 	update() {
 		if (player + 1) {
+			this.gun.update();
 			// accelerate
-			const dir = Math.atan2(actor[player].x - this.x, actor[player].y - this.y);
-			this.xVel += Math.sin(dir) * this.constructor.speed;
-			this.yVel += Math.cos(dir) * this.constructor.speed;
-			// pew
+			this.rot = Math.atan2(actor[player].x - this.x, actor[player].y - this.y);
+			this.xVel += Math.sin(this.rot) * this.constructor.speed;
+			this.yVel += Math.cos(this.rot) * this.constructor.speed;
+			// course correct
 			if (this.cooldown-- <= 0) {
-				const x = this.x - actor[player].x,
-				y = this.y - actor[player].y
-				// stop
-				this.xVel = 0;
-				this.yVel = 0;
-				// shoot
-				bullet.add(new peaShot(
-					this,
-					(actor[player].x - this.x) * 0.015,
-					(actor[player].y - this.y) * 0.015)
-				);
-				// reset
-				this.cooldown = rand(90) + 30;
+				this.xVel = 0, this.yVel = 0;
+				this.cooldown = (rand(90) + 30);
+			}
+			// pew
+			const x = this.x - actor[player].x, y = this.y - actor[player].y;
+			if (x ** 2 + y ** 2 < this.gun.range ** 2) {
+				this.gun.fire();
 			}
 			// collide
 			collide(this, actor[player], this.constructor.dmg);
@@ -52,32 +50,32 @@ globalThis.octahedronShip = class extends ship {
 	}
 	hurt(dmg) {
 		if ((this.hp -= dmg) <= 0) {
-			if (rand(4)) {
-				actor[this.index] = new powerup("heal", this);
+			if (this.gun.name == "pea") {
+				actor[this.index] = new ship.powerup("heal", this);
 			} else {
-				actor[this.index] = new powerup("weapon", this, rand(2)? "sniper": "shot");
+				actor[this.index] = new ship.powerup("weapon", this, this.gun.name);
 			}
 			actor[this.index].index = this.index;
 		}
 		return true;
 	}
 	powerUp(i) {
-		if (i.power == "heal") {
+		if (i.power != "weapon" || this.gun.name == "pea") {
 			return i[i.power](this);
 		} return false;
 	}
 	draw() {
+		this.gun.draw?.();
 		ctx.beginPath();
-
 		ctx.strokeStyle = this.color || this.constructor.colors[rand(this.constructor.colors.length)];
 		const l = [
 			Math.sin(this.spin) * this.size,
-			Math.sin(this.spin + Math.PI * 0.5) * this.size,
+			Math.sin(this.spin + Math.PI * .5) * this.size,
 			Math.sin(this.spin + Math.PI) * this.size,
 			Math.sin(this.spin + Math.PI * 1.5) * this.size
 		];
 		const lmin = Math.min(...l), lmax = Math.max(...l),
-		n = mod(Math.round((-this.spin + TAU * 0.5) / TAU * 4 % 4), 4);
+		n = mod(Math.round((-this.spin + TAU * .5) / TAU * 4 % 4), 4);
 		this.n = n;
 		ctx.moveTo(this.x, this.y - this.size);
 		// diamond

@@ -1,30 +1,30 @@
-globalThis.playerShip = class extends ship {
+ship.player = class extends ship.template {
 	static hp = 30;
 	static size = 4;
 	static hitbox = 2;
-	static speed = 0.25;
-	static frict = 0.95;
-	static rot = 0.3;
+	static speed = .25;
+	static frict = .95;
+	static rot = .3;
 	static iframes = 15;
-	constructor(x = canvas.width * 0.5,
-	y = canvas.height * 0.5, ...a) {
+	constructor(x = canvas.width * .5,
+	y = canvas.height * .5, ...a) {
 		super(x, y, a);
-		this.rot ??= 0;
+		this.rot ??= Math.PI;
 		this.iframes ??= 60;
-		this.gun ??= new peaGun(this);
+		this.gun ??= new gun.pea(this);
 		afterImage = 0;
 		this.blur ??= [];
 	}
 	update() {
-		this.iframes--
+		this.iframes--;
 		this.gun.update();
 		// rotate
-		this.rot += (key.right - key.left) * this.constructor.rot * (key.d? 0.2: 1);
+		this.rot -= (key.right - key.left) * this.constructor.rot * (key.d? .2: 1);
 		const sin = Math.sin(this.rot), cos = Math.cos(this.rot);
 		// accelerate
 		if (key.a) {
 			this.xVel += sin * this.constructor.speed;
-			this.yVel -= cos * this.constructor.speed;
+			this.yVel += cos * this.constructor.speed;
 		}
 		// move
 		this.x += this.xVel;
@@ -37,14 +37,14 @@ globalThis.playerShip = class extends ship {
 	}
 	hurt(dmg) {
 		if (this.iframes <= 0) {
-			afterImage = Math.max(afterImage, 0) + dmg * 0.5;
+			afterImage = Math.max(afterImage, 0) + dmg * .5;
 			this.iframes = dmg * 2;
 			if ((this.hp -= dmg) <= 0) {
 				afterImage = Infinity;
 				player = undefined;
 				if (this.gun.name != "pea") {
 					// drop weapons (except peashooter)
-					actor[this.index] = new powerup("weapon", this, this.gun.name);
+					actor[this.index] = new ship.powerup("weapon", this, this.gun.name);
 					actor[this.index].index = this.index;
 				} else {
 					delete actor[this.index];
@@ -60,7 +60,7 @@ globalThis.playerShip = class extends ship {
 		ctx.beginPath();
 		ctx.strokeStyle = "#aaa";
 		let x = this.x, y = this.y, // default in bounds
-		size = this.size * 0.5; // default OOB
+		size = this.size * .5; // default OOB
 		if (this.x < 8 || this.x > canvas.width - 8) {
 			const hori = clamp(this.x, 8, canvas.width - 8);
 			if (this.y < 8 || this.y > canvas.height - 8) {
@@ -118,9 +118,9 @@ globalThis.playerShip = class extends ship {
 		ctx.beginPath();
 		const sin = Math.sin(rot) * size,
 		cos = Math.cos(rot) * size;
-		ctx.moveTo(x - sin - cos, y - sin + cos);
-		ctx.lineTo(x + sin, y - cos);
-		ctx.lineTo(x - sin + cos, y + sin + cos);
+		ctx.moveTo(x - sin + cos, y - sin - cos);
+		ctx.lineTo(x + sin, y + cos);
+		ctx.lineTo(x - sin - cos, y + sin - cos);
 		ctx.stroke();
 	}
 }

@@ -1,22 +1,26 @@
-globalThis.sniperGun = class extends gun {
-	static reload = 60;
-	static ammo = "boltShot";
+gun.sniper = class extends gun.template {
 	static name = "sniper";
+	static ammo = "bolt";
+	static reload = 90;
+	constructor(parent, ...a) {
+		super(parent, a);
+		this.reload = this.constructor.reload;
+	}
 	draw() {
 		ctx.beginPath();
 		ctx.strokeStyle = this.reload <= 0? "#0f07": "#0f03";
 		ctx.moveTo(this.parent.x, this.parent.y);
 		ctx.lineTo(
-			this.parent.x + Math.sin(this.parent.rot) * boltShot.speed * boltShot.hp,
-			this.parent.y - Math.cos(this.parent.rot) * boltShot.speed * boltShot.hp
+			this.parent.x + Math.sin(this.parent.rot) * shot.bolt.speed * shot.bolt.hp,
+			this.parent.y + Math.cos(this.parent.rot) * shot.bolt.speed * shot.bolt.hp
 			)
 		ctx.stroke();
 	}
 }
 
-globalThis.boltShot = class extends shot {
+shot.bolt = class extends shot.template {
 	static hp = 10;
-	static dmg = 15;
+	static dmg = 20;
 	static size = 10;
 	static hitbox = 1;
 	static speed = 30;

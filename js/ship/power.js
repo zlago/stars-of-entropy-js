@@ -1,4 +1,4 @@
-globalThis.powerup = class {
+ship.powerup = class {
 	static size = 5;
 	static hitbox = 5;
 	static timer = 300;
@@ -9,8 +9,8 @@ globalThis.powerup = class {
 		this.power = power;
 		this.value = value ?? this.constructor[power + "Default"];
 		this.default = !value;
-		this.x = (Math.round(coord?.x ?? rand(canvas.width))) + 0.5;
-		this.y = (Math.round(coord?.y ?? rand(canvas.height))) + 0.5;
+		this.x = (Math.round(coord?.x ?? rand(canvas.width))) + .5;
+		this.y = (Math.round(coord?.y ?? rand(canvas.height))) + .5;
 		this.size = this.constructor.size;
 		this.hitbox = this.constructor.hitbox;
 		this.timer = this.constructor.timer;
@@ -32,11 +32,11 @@ globalThis.powerup = class {
 		}
 	}
 	heal = target => target.hp != target.constructor.hp?
-		target.hp = Math.min(target.hp + this.value, target.constructor.hp):
+		target.hp = Math.min(target.hp + this.value, target.hpMax):
 		false;
-	weapon = target => target.gun = new globalThis[this.value + "Gun"](target);
+	weapon = target => target.gun = new gun[this.value](target);
 	draw() {
-		this.spin += 0.1;
+		this.spin += .1;
 		if (this.timer > this.constructor.blink || this.timer % 2) {
 			const s = this.size;
 			ctx.beginPath();
@@ -50,7 +50,7 @@ globalThis.powerup = class {
 					ctx.strokeRect(this.x - n, this.y - f, n * 2, f * 2);
 					break;
 				case "weapon":
-					const ins = s - 1.5;
+					const ins = s - 2;
 					const spin = Math.sin(this.spin) * ins;
 					const thisIcon = icon[this.value];
 					const l = thisIcon?.length;

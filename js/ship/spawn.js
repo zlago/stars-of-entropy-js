@@ -1,4 +1,4 @@
-spawn = (enemy, x, y, ...a) => actor.add(new spawner(enemy, x, y, ...a));
+const spawn = (enemy, x, y, ...a) => actor.add(new spawner(enemy, x, y, ...a));
 
 class spawner {
 	static spawn = 30;
@@ -6,7 +6,7 @@ class spawner {
 	x = rand(canvas.width),
 	y = rand(canvas.height), ...a) {
 		if (typeof e == "string") {
-			this.e = globalThis[e];
+			this.e = ship[e];
 		} else {
 			this.e = e;
 		}

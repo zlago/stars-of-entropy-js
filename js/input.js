@@ -1,3 +1,5 @@
+"use strict";
+
 const key = {a : 0, b : 0, d : 0, left : 0, right : 0, set input(keyCode) {
 	key.binds[this.curr] = keyCode; this.curr = undefined;
 }, curr : undefined, change : (input, value) => {

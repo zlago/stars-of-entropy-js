@@ -30,61 +30,70 @@
 	</div>
 	<div class="box" id="debug">
 		<div>
-			<select id="weaponSelect">
+			<select name="weaponSelect">
 				<option>pea</option>
 				<option>sniper</option>
-				<option>shot</option>
-				<option>flame</option>
+				<option>shotgun</option>
+				<option>flamer</option>
+				<option>scatter</option>
+				<option>missile</option>
 			</select>
-			<button id="weaponButton">weapon</button>
+			<button name="weaponButton">create</button>
 		</div>
 		<div>
-			<select id="enemySelect">
-				<option>tridipyraShip</option>
-				<option>octahedronShip</option>
+			<select name="enemySelect">
+				<option>tridipyra</option>
+				<option>octahedron</option>
 			</select>
-			<button id="enemyButton">enemy</button>
+			<button name="enemyButton">spawn</button>
+			<button name="geno">wipe</button>
 		</div>
 		<div>
-			<input id="hpSelect" type="range" min="0" max="30">
-			<button id="hpButton">hp</button>
+			<input name="hpSelect" type="range" min="0" max="30">
+			<button name="hpButton">hp</button>
 		</div>
 		<div>
-			<input id="passField" type="text">
-			<button id="passGet">get</button>
-			<button id="passSet">set</button>
+			<input name="passField" type="text">
+			<button name="passGet">get</button>
+			<button name="passSet">set</button>
 		</div>
 		<div>
-			<button id="geno">wipe enemies</button>
-			<button id="blur">blur</button>
-			<input id="hitboxes" type="checkbox">show hitboxes</button>
+			<button name="blur">blur</button>
+			<input name="hitboxes" type="checkbox">show hitboxes</button>
+			<input name="hpbars" type="checkbox">show hp bars</button>
 		</div>
 		<div>
-			<textarea rows="3" cols="34" name="eval">alert("look, discount debugging");</textarea>
-			<br><button onclick='try {document.getElementById("err").value = eval(document.getElementsByName("eval")[0].value);
-			} catch(e) {document.getElementById("err").value = e;}'>run</button><input type="text" id="err" value="(output here)">
+			<textarea id="eval" rows="3">alert("look, discount debugging");</textarea>
+			<br><button onclick='try {
+				document.getElementById("err").value =
+				eval(document.getElementById("eval").value);
+			} catch(e) {
+				document.getElementById("err").value = e;
+			}'>run</button><input type="text" id="err" value="output here">
 		</div>
-		<button onclick="debug.close()" style="align-self: center;">close</button>
+		<button name="close" style="align-self: center;">close</button>
 	</div>
 	<canvas id="game-screen" width="256" height="192">
 		no canvas support
 	</canvas>
 </body>
 	<!-- / -->
-		<script type="text/javascript" src="main.js"></script>
-		<script type="text/javascript" src="class.js"></script>
-		<script type="text/javascript" src="debug.js"></script>
-		<script type="text/javascript" src="input.js"></script>
-		<script type="text/javascript" src="icons.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript" src="js/templates.js"></script>
+		<script type="text/javascript" src="js/debug.js"></script>
+		<script type="text/javascript" src="js/input.js"></script>
+		<script type="text/javascript" src="js/icons.js"></script>
 	<!-- /ship/ -->
-		<script type="text/javascript" src="ship/player.js"></script>
-		<script type="text/javascript" src="ship/spawn.js"></script>
-		<script type="text/javascript" src="ship/octa.js"></script>
-		<script type="text/javascript" src="ship/tridi.js"></script>
-		<script type="text/javascript" src="ship/power.js"></script>
+		<script type="text/javascript" src="js/ship/player.js"></script>
+		<script type="text/javascript" src="js/ship/spawn.js"></script>
+		<script type="text/javascript" src="js/ship/octa.js"></script>
+		<script type="text/javascript" src="js/ship/tridi.js"></script>
+		<script type="text/javascript" src="js/ship/power.js"></script>
 	<!-- /gun/ -->
-		<script type="text/javascript" src="gun/pea.js"></script>
-		<script type="text/javascript" src="gun/sniper.js"></script>
-		<script type="text/javascript" src="gun/shotgun.js"></script>
-		<script type="text/javascript" src="gun/flame.js"></script>
+		<script type="text/javascript" src="js/gun/pea.js"></script>
+		<script type="text/javascript" src="js/gun/sniper.js"></script>
+		<script type="text/javascript" src="js/gun/shotgun.js"></script>
+		<script type="text/javascript" src="js/gun/flame.js"></script>
+		<script type="text/javascript" src="js/gun/scatter.js"></script>
+		<script type="text/javascript" src="js/gun/missile.js"></script>
 </html>

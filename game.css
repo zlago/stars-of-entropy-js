@@ -80,8 +80,14 @@ canvas {
 #debug {
 	inset: 0; margin: auto;
 	width: fit-content; height: fit-content;
+	max-width: calc(100% - 10vmin);
+	max-height: calc(100% - 10vmin);
 	flex-direction: column;
 	grid-gap: 1vmin;
+}
+#eval {
+	min-width: -webkit-fill-available;
+	max-width: 100%; max-height: 100%;
 }
 
 /* dialogue box */
