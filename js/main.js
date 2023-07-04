@@ -1,5 +1,10 @@
 // todo: research and debug touch controls
 // todo: weapon carrier ship
+// todo: title screen, settings menu
+// todo: player inventory, lives, game over
+// todo: dialogue? idk
+// todo: actual gameplay
+// todo: explosions
 
 "use strict";
 
@@ -10,8 +15,8 @@ const canvas = document.getElementById("game-screen"),
 ctx = canvas.getContext("2d");
 
 // init
-const actor = [], bullet = [], gun = {}, ship = {}, shot = {};
-const ticker = {
+const actor = [], bullet = [], gun = {}, ship = {}, shot = {},
+ticker = {
 	isRunning : false,
 	run : function() {
 		this.pause(); this.isRunning = true;
@@ -29,6 +34,7 @@ addEventListener("load", () => {
 })
 
 actor.add = bullet.add = function (entity) {
+	// this is better than letting empty slots "accumulate", right?
 	let x = this.findIndex(e => e == undefined);
 	if (x == -1) {x = this.length}
 	this[x] = entity;

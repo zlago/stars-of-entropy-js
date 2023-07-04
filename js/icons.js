@@ -15,7 +15,7 @@ const icon = {
 		"moveTo",-.4,1,
 		"lineTo",-1, .4,
 	],
-	missile: [ // err, redo this one?
+	missile: [
 		"moveTo", 1, 0,
 		"lineTo", 1,-1,
 		"lineTo", 0,-1,
