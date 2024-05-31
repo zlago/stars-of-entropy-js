@@ -147,7 +147,7 @@ const rand = i => Math.floor(Math.random() * i), // eg. rand(2) = 0 || 1
 mod = (x, y) => (x % y + (x < 0? y: 0)) % y, // last `% y` fixes an edgecase for `x = -y`
 randRange = (x, y = -x) => Math.random() * (x - y) + y, // x <= randRange(x, y) < y
 clamp = (v, min, max) => Math.min(Math.max(v, min), max), // min <= v <= max
-clear = e => ctx.clearRect(0, 0, canvas.width, canvas.height),
+clear = e => {ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height)},
 collide = (a, v, d) => // define d to also try to hurt the enemy
 	a.x + (a.hitboxX ?? a.hitbox) > v.x - (v.hitboxX ?? v.hitbox) &&
 	a.x - (a.hitboxX ?? a.hitbox) < v.x + (v.hitboxX ?? v.hitbox) &&

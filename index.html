@@ -51,10 +51,10 @@
 		</div>
 		<div>
 			<input name="hpSelect" type="range" min="0" max="30">
-			<button name="hpButton">hp</button>
+			<button name="hpButton">set hp / respawn</button>
 		</div>
 		<div>
-			<input name="passField" type="text">
+			<input name="passField" type="text" placeholder="unused -->">
 			<button name="passGet">get</button>
 			<button name="passSet">set</button>
 		</div>
@@ -64,13 +64,13 @@
 			<input name="hpbars" type="checkbox">show hp bars</button>
 		</div>
 		<div>
-			<textarea id="eval" rows="3">alert("look, discount debugging");</textarea>
+			<textarea id="eval" rows="3" placeholder='spawn("octahedron", {gun: "sniper"})'></textarea>
 			<br><button onclick='try {
 				document.getElementById("err").value =
 				eval(document.getElementById("eval").value);
 			} catch(e) {
 				document.getElementById("err").value = e;
-			}'>run</button><input type="text" id="err" value="output here">
+			}'>run</button><input type="text" id="err" placeholder="output here">
 		</div>
 		<button name="close" style="align-self: center;">close</button>
 	</div>

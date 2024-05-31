@@ -61,34 +61,36 @@ ship.player = class extends ship.template {
 		ctx.strokeStyle = "#aaa";
 		let x = this.x, y = this.y, // default in bounds
 		size = this.size * .5; // default OOB
-		if (this.x < 8 || this.x > canvas.width - 8) {
-			const hori = clamp(this.x, 8, canvas.width - 8);
-			if (this.y < 8 || this.y > canvas.height - 8) {
-				// hori & vert OOB
+		if (this.x < -8 || this.x > canvas.width + 8 || this.y < -8 || this.y > canvas.height + 8) {
+			if (this.x < 8 || this.x > canvas.width - 8) {
+				const hori = clamp(this.x, 8, canvas.width - 8);
+				if (this.y < 8 || this.y > canvas.height - 8) {
+					// hori & vert OOB
+					const vert = clamp(this.y, 8, canvas.height - 8),
+					rot = Math.atan2(this.x - hori, this.y - vert),
+					sin = Math.sin(rot) * 4, cos = Math.cos(rot) * 4;
+					ctx.moveTo(hori + cos, vert - sin);
+					ctx.lineTo(hori + sin, vert + cos);
+					ctx.lineTo(hori - cos, vert + sin);
+					x = hori - sin;
+					y = vert - cos;
+				} else {
+					// horizontally OOB
+					x = clamp(this.x, 12, canvas.width - 12);
+					const hori2 = clamp(this.x, 4, canvas.width - 4);
+					ctx.moveTo(hori, this.y + 4);
+					ctx.lineTo(hori2, this.y);
+					ctx.lineTo(hori, this.y - 4);
+				}
+			} else if (this.y < 8 || this.y > canvas.height - 8) {
+				// vertically OOB
+				y = clamp(this.y, 12, canvas.height - 12);
 				const vert = clamp(this.y, 8, canvas.height - 8),
-				rot = Math.atan2(this.x - hori, this.y - vert),
-				sin = Math.sin(rot) * 4, cos = Math.cos(rot) * 4;
-				ctx.moveTo(hori + cos, vert - sin);
-				ctx.lineTo(hori + sin, vert + cos);
-				ctx.lineTo(hori - cos, vert + sin);
-				x = hori - sin;
-				y = vert - cos;
-			} else {
-				// horizontally OOB
-				x = clamp(this.x, 12, canvas.width - 12);
-				const hori2 = clamp(this.x, 4, canvas.width - 4);
-				ctx.moveTo(hori, this.y + 4);
-				ctx.lineTo(hori2, this.y);
-				ctx.lineTo(hori, this.y - 4);
+				vert2 = clamp(this.y, 4, canvas.height - 4);
+				ctx.moveTo(this.x + 4, vert);
+				ctx.lineTo(this.x, vert2);
+				ctx.lineTo(this.x - 4, vert);
 			}
-		} else if (this.y < 8 || this.y > canvas.height - 8) {
-			// vertically OOB
-			y = clamp(this.y, 12, canvas.height - 12);
-			const vert = clamp(this.y, 8, canvas.height - 8),
-			vert2 = clamp(this.y, 4, canvas.height - 4);
-			ctx.moveTo(this.x + 4, vert);
-			ctx.lineTo(this.x, vert2);
-			ctx.lineTo(this.x - 4, vert);
 		} else {
 			// in bounds
 			size = this.size;

@@ -33,13 +33,13 @@ addEventListener("keyup", e => key.change(e.keyCode, false), true);
 
 function bindButton(id, input) {
 	let element = document.getElementById(id);
-	element.addEventListener("touchstart", e => key[input] = true);
-	element.addEventListener("touchend", e => key[input] = false);
+	element.addEventListener("touchstart", e => key[input] = true, {passive: false});
+	element.addEventListener("touchend", e => key[input] = false, {passive: false});
 }
 
-document.getElementById("ctrl_debug").addEventListener("touchstart", debug.open);
+document.getElementById("ctrl_debug").addEventListener("touchstart", debug.open, {passive: false});
 bindButton("ctrl_l", "left");
 bindButton("ctrl_r", "right");
 bindButton("ctrl_s", "s");
 bindButton("ctrl_a", "a");
-document.getElementById("ctrl_ss").addEventListener("touchstart", e => buttons[sKey] = !buttons[sKey]);
+document.getElementById("ctrl_ss").addEventListener("touchstart", e => buttons[sKey] = !buttons[sKey], {passive: false});

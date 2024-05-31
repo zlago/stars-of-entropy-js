@@ -18,8 +18,13 @@ class spawner {
 	}
 	update() {
 		if (!--this.timer) {
-			actor[this.index] = new this.e(this.x, this.y, this.a);
-			actor[this.index].index = this.index;
+			try {
+				actor[this.index] = new this.e(this.x, this.y, this.a);
+				actor[this.index].index = this.index;
+			} catch (e) { // far too annoying
+				delete actor[this.index];
+				console.error(e);
+			}
 		}
 	}
 	draw() {
