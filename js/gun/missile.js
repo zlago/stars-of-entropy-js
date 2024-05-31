@@ -3,7 +3,7 @@ gun.missile = class extends gun.template {
 	static ammo = "missile";
 	static reload = 120;
 	static spread = TAU * .05;
-	constructor(parent, ...a) {
+	constructor(parent, a) {
 		super(parent, a);
 		this.range = shot.missile.range;
 	}
@@ -29,7 +29,7 @@ shot.missile = class extends shot.template {
 	static velo = .2;
 	static frict = .97;
 	static range = 192;
-	constructor(parent, x = 0, y = 0, ...a) {
+	constructor(parent, x = 0, y = 0, a) {
 		super(parent, x, y, a);
 		this.rot = parent.rot;
 		this.seek();

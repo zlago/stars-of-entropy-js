@@ -16,7 +16,7 @@ ship.tridipyra = class extends ship.template {
 		"#fff",
 	];
 	static spawn = 1;
-	constructor(x = 0, y = 0, ...a) {
+	constructor(x = 0, y = 0, a) {
 		super(x, y, a);
 		this.spin ??= 0;
 		this.cooldown ??= 0;

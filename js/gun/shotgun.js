@@ -26,7 +26,7 @@ shot.shell = class extends shot.template {
 	static size = 1.5;
 	static hitbox = 1.5;
 	static speed = 5;
-	constructor(parent, x = 0, y = 0, ...a) {
+	constructor(parent, x = 0, y = 0, a) {
 		super(parent, x, y, a);
 		this.hp += rand(5);
 	}

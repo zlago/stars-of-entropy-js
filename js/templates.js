@@ -1,5 +1,5 @@
 gun.template = class {
-	constructor(parent, ...a) {
+	constructor(parent, a) {
 		this.parent = parent;
 		const ammo = shot[this.constructor.ammo];
 		this.range = ammo.hp * ammo.speed;
@@ -17,7 +17,7 @@ gun.template = class {
 }
 
 shot.template = class {
-	constructor(parent, x = 0, y = 0, ...a) {
+	constructor(parent, x = 0, y = 0, a) {
 		this.hp = this.constructor.hp;
 		this.parent = parent;
 		this.x = parent.x;

@@ -141,15 +141,7 @@ const hud = {
 	colors : ["#888", "#fff", "#f0f", "#0ff", "#f00", "#ff0", "#0f0", "#00f", "#f80"]
 }
 
-
-function overwrite(target, a) {
-	for (const i in a) {
-		const t = a[i].split("=");
-		t[0] = t[0].trim(); t[1] = t[1].trim();
-		if ((t[1] - 0) + "" != "NaN") {t[1] -= 0} // NaN != NaN
-		target[t[0]] = t[1];
-	}
-}
+const overwrite = (target, a) => {for (const i in a) target[i] = a[i];} // as on the tin
 
 const rand = i => Math.floor(Math.random() * i), // eg. rand(2) = 0 || 1
 mod = (x, y) => (x % y + (x < 0? y: 0)) % y, // last `% y` fixes an edgecase for `x = -y`

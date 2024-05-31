@@ -16,7 +16,7 @@ ship.octahedron = class extends ship.template {
 		"#fff",
 	];
 	static spawn = 2;
-	constructor(x = 0, y = 0, ...a) {
+	constructor(x = 0, y = 0, a) {
 		super(x, y, a);
 		this.gun ??= this.constructor.gun;
 		this.gun = new gun[this.gun](this);

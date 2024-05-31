@@ -24,7 +24,7 @@ ship.hauler = class extends ship.template {
 		"#fff",
 	];
 	static spawn = 2;
-	constructor(x = 0, y = 0, ...a) {
+	constructor(x = 0, y = 0, a) {
 		super(x, y, a);
 		const items = this.constructor.items;
 		this.item ??= items[rand(items.length)];

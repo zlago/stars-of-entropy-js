@@ -2,7 +2,7 @@ gun.sniper = class extends gun.template {
 	static name = "sniper";
 	static ammo = "bolt";
 	static reload = 90;
-	constructor(parent, ...a) {
+	constructor(parent, a) {
 		super(parent, a);
 		this.reload = this.constructor.reload;
 	}

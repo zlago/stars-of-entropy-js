@@ -7,7 +7,7 @@ ship.player = class extends ship.template {
 	static rot = .3;
 	static iframes = 15;
 	constructor(x = canvas.width * .5,
-	y = canvas.height * .5, ...a) {
+	y = canvas.height * .5, a) {
 		super(x, y, a);
 		this.rot ??= Math.PI;
 		this.iframes ??= 60;
