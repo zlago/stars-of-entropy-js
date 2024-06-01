@@ -1,17 +1,15 @@
-const spawn = (enemy, x, y, a) => actor.add(new spawner(enemy, x, y, a));
+const spawn = (enemy, a) => actor.add(new spawner(enemy, a));
 
 class spawner {
 	static spawn = 30;
-	constructor(e = tridipyraShip,
-	x = rand(canvas.width),
-	y = rand(canvas.height), a) {
+	constructor(e = tridipyraShip, a) {
 		if (typeof e == "string") {
 			this.e = ship[e];
 		} else {
 			this.e = e;
 		}
-		this.x = x;
-		this.y = y;
+		this.x = a?.x ?? rand(canvas.width);
+		this.y = a?.y ?? rand(canvas.height);
 		this.a = a;
 		this.timer = this.e.spawn * this.constructor.spawn;
 		this.size = 1 / this.e.spawn;
