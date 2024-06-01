@@ -37,8 +37,8 @@ ship.player = class extends ship.template {
 	}
 	hurt(dmg) {
 		if (this.iframes <= 0) {
-			afterImage = Math.max(afterImage, 0) + dmg * .5;
-			this.iframes = dmg * 2;
+			afterImage = 1; //afterImage = Math.max(afterImage, 0) + dmg * .5;
+			this.iframes = 1; //this.iframes = dmg * 2;
 			if ((this.hp -= dmg) <= 0) {
 				afterImage = Infinity;
 				player = undefined;

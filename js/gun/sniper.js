@@ -8,7 +8,12 @@ gun.sniper = class extends gun.template {
 	}
 	draw() {
 		ctx.beginPath();
-		ctx.strokeStyle = this.reload <= 0? "#0f07": "#0f03";
+		if (this.reload <= 0)
+			ctx.strokeStyle = "#0f07"; // shot ready
+		else if (this.reload <= 30 && this.reload & 1)
+			ctx.strokeStyle = "#ff03"; // reloading, almost finished!
+		else
+			ctx.strokeStyle = "#f003"; // reloading
 		ctx.moveTo(this.parent.x, this.parent.y);
 		ctx.lineTo(
 			this.parent.x + Math.sin(this.parent.rot) * shot.bolt.speed * shot.bolt.hp,

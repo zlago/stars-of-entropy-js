@@ -65,7 +65,13 @@ shot.missile = class extends shot.template {
 				const ydel = Math.abs(this.y - actor[this.target].y);
 				if (xdel + ydel < this.constructor.range) {
 					// home in
-					this.rot = Math.atan2(actor[this.target].x - this.x, actor[this.target].y - this.y);
+					if (1) {
+						this.rot = Math.atan2(actor[this.target].x - this.x, actor[this.target].y - this.y);
+					} else {
+						const target = actor[this.target];
+						const ticks = Math.sqrt((this.x - target.x) ** 2 + (this.y - target.y) ** 2) / Math.sqrt(this.xVel ** 2 + this.yVel ** 2);
+						this.rot = Math.atan2(target.x + target.xVel * ticks - this.x, target.y + target.yVel * ticks- this.y);
+					}
 					this.xVel += Math.sin(this.rot) * this.constructor.velo;
 					this.yVel += Math.cos(this.rot) * this.constructor.velo;
 				} else {
